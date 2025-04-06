@@ -20,12 +20,12 @@ function App() {
         </div>
         <h1 className="font-mono text-5xl">Data Producer Dashboard</h1>
       </div>
-      <div className="flex flex-wrap justify-start gap-1 px-[2rem]">
+      <div className="flex flex-wrap justify-center gap-1 px-[2rem]">
         {Array.from({ length: 10 }).map((_, i) => (
           <ProducerMonitor
             id={i.toString()}
             key={i}
-            className="flex-1 min-w-[250px] max-w-[calc(20%-1rem)]"
+            className="flex-1 min-w-[250px] max-w-[calc(20%-1rem)] basis-[20%] justify-center"
           />
         ))}
       </div>
