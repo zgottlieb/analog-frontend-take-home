@@ -1,10 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Message } from './types';
 
-function useProducerConnection(connectionId: string) {
-  const [messages, setMessages] = useState<string[]>([]);
+function useProducerConnection(connectionId: string): {
+  messages: Message[];
+  closeConnection: () => void;
+  startConnection: () => void;
+} {
+  const [messages, setMessages] = useState<Message[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
 
-  const startConnection = () => {
+  const startConnection = useCallback(() => {
     // Only create a new connection if there's no active socket
     if (socketRef.current && socketRef.current.readyState !== WebSocket.CLOSED)
       return;
@@ -13,10 +18,12 @@ function useProducerConnection(connectionId: string) {
       `http://localhost:8000/producer/${connectionId}`
     );
     socketRef.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
       // Update messages array without triggering extra re-renders if you don't need to
-      setMessages((prevMessages) => [...prevMessages, event.data]);
+      setMessages((prevMessages) => [...prevMessages, ...data]);
     };
-  };
+  }, [connectionId]);
 
   const closeConnection = () => {
     socketRef.current?.close();
@@ -24,13 +31,12 @@ function useProducerConnection(connectionId: string) {
     socketRef.current = null;
   };
 
-  // Optionally, auto-start on mount
   useEffect(() => {
     startConnection();
     return () => {
       closeConnection();
     };
-  }, []);
+  }, [startConnection]);
 
   return { messages, closeConnection, startConnection };
 }
