@@ -2,13 +2,9 @@ import reactLogo from './assets/react.svg';
 import analogGarageLogo from './assets/garage-logo.png';
 import viteLogo from '/vite.svg';
 import './App.css';
-import useProducerConnection from './useProducerConnection';
-import Chart from './Chart';
+import ProducerMonitor from './ProducerMonitor';
 
 function App() {
-  const { messages, startConnection, closeConnection } =
-    useProducerConnection('0');
-
   return (
     <>
       <div>
@@ -30,11 +26,30 @@ function App() {
         </a>
       </div>
       <h1>Analog Garage - Producer Data Viewer</h1>
-      <Chart data={messages} />
-      <div>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-start',
+          gap: '1rem',
+        }}
+      >
+        {Array.from({ length: 10 }).map((_, i) => (
+          <ProducerMonitor
+            id={i.toString()}
+            key={i}
+            style={{
+              flex: '1 1 calc(20% - 1rem)',
+              minWidth: '250px',
+            }}
+          />
+        ))}
+      </div>
+      {/* TODO: Put back start/stop buttons */}
+      {/* <div>
         <button onClick={startConnection}>Start Connection</button>
         <button onClick={closeConnection}>Close Connection</button>
-      </div>
+      </div> */}
     </>
   );
 }

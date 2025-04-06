@@ -10,10 +10,10 @@ type ChartProps = {
 };
 
 const Chart = ({
-  data = [],
-  width = 500,
-  height = 300,
-  margin = { top: 10, right: 10, bottom: 30, left: 40 },
+  data,
+  width = 250,
+  height = 250,
+  margin = { top: 10, right: 10, bottom: 10, left: 10 },
 }: ChartProps) => {
   const svgRef = useRef(null);
 
