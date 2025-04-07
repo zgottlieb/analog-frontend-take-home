@@ -3,5 +3,5 @@
 /* TODO: Address the warning on @theme */
 @theme {
   --color-charcoal: #242424;
-  --font-display: font-family: 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif';
+  --font-display: 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif';
 }
