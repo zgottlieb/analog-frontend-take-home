@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import { Message } from './types';
+import { useChartContext } from './ChartContext';
 
 type ChartProps = {
   data: Message[];
@@ -16,6 +17,14 @@ const Chart = ({
   margin = { top: 10, right: 10, bottom: 10, left: 10 },
 }: ChartProps) => {
   const svgRef = useRef(null);
+
+  const { yDomain, updateYDomain } = useChartContext();
+
+  // Iterate through all data to set the yDomain
+  // TODO: Consider alternatives for setting global yDomain
+  useEffect(() => {
+    data.forEach((d) => updateYDomain(d.value));
+  }, [data, updateYDomain]);
 
   useEffect(() => {
     // Clear any existing content on each update
@@ -45,20 +54,9 @@ const Chart = ({
       .domain(xExtent as [Date, Date])
       .range([0, innerWidth]);
 
-    const yExtent = d3.extent(
-      data.filter((d) => d.value !== undefined),
-      (d) => d.value
-    );
-
-    // Get largest delta to use for symmetric domain around zero
-    const absMax = Math.max(
-      Math.abs(yExtent[0] ?? 0),
-      Math.abs(yExtent[1] ?? 0)
-    );
-
     const yScale = d3
       .scaleLinear()
-      .domain([-absMax, absMax])
+      .domain(yDomain)
       .nice()
       .range([innerHeight, 0]);
 
@@ -109,7 +107,7 @@ const Chart = ({
       .attr('stroke', 'limegreen')
       .attr('stroke-width', 1)
       .attr('d', lineGenerator);
-  }, [data, width, height, margin]);
+  }, [data, width, height, margin, yDomain]);
 
   return <svg ref={svgRef} width={width} height={height} />;
 };
