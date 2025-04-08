@@ -27,7 +27,7 @@ function App() {
           </div>
           <h1 className="font-mono text-5xl">Data Producer Dashboard</h1>
         </div>
-        <div className="flex items-center gap-4 px-[2rem] mb-4 py-2 bg-base-200">
+        <div className="flex items-center gap-4 px-[2rem] mb-4 py-2">
           <div className="font-mono text-sm flex items-center gap-4">
             <span>
               Session start time:{' '}
@@ -52,14 +52,9 @@ function App() {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-1 px-[2rem]">
+        <div className="flex flex-wrap justify-start gap-1 px-[2rem]">
           {Array.from({ length: 10 }).map((_, i) => (
-            <ProducerMonitor
-              id={i.toString()}
-              key={i}
-              className="flex-1 min-w-[250px] max-w-[calc(20%-1rem)] basis-[20%] justify-center mb-4"
-              isPaused={isPaused}
-            />
+            <ProducerMonitor id={i.toString()} key={i} isPaused={isPaused} />
           ))}
         </div>
       </div>

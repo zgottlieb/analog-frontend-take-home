@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin 'daisyui';
 
 /* TODO: Address the warning on @theme */
 @theme {
