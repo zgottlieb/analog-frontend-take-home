@@ -1,5 +1,5 @@
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import { TIME_WINDOW } from './types';
+import { TIME_WINDOW } from '../types';
 
 function ControlPanel({
   isPaused,

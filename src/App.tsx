@@ -1,8 +1,8 @@
 import analogGarageLogo from './assets/garage-logo.png';
-import ProducerMonitor from './ProducerMonitor';
+import ProducerMonitor from './components/ProducerMonitor';
 import { useState } from 'react';
 import { ChartProvider } from './ChartContext';
-import ControlPanel from './ControlPanel';
+import ControlPanel from './components/ControlPanel';
 
 function App() {
   const [isPaused, setIsPaused] = useState(false);

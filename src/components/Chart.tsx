@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import { Message, TIME_WINDOW } from './types';
-import { useChartContext } from './ChartContext';
+import { Message, TIME_WINDOW } from '../types';
+import { useChartContext } from '../ChartContext';
 
 type ChartProps = {
   data: Message[];
@@ -20,7 +20,6 @@ const Chart = ({
 
   const { yDomain, updateYDomain } = useChartContext();
 
-  // Iterate through all data to set the yDomain
   // TODO: Consider alternatives for setting global yDomain
   useEffect(() => {
     data.forEach((d) => updateYDomain(d.value));
@@ -35,12 +34,11 @@ const Chart = ({
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-    // Create a group element to contain the chart elements
+    // Group element to contain the chart elements
     const g = svg
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-    // Set up the scales
     const parseDate = d3.isoParse;
     const filteredData = data.filter((d) => parseDate(d.timestamp) !== null);
 

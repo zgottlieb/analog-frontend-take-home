@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Message } from './types';
 
-// TODO: Tweak these constants based on performance testing
 // Maximum number of messages to keep in the buffer
 const MAX_BUFFER_SIZE = 1000;
 

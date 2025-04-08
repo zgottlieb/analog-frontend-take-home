@@ -1,8 +1,6 @@
 import Chart from './Chart';
-import useProducerConnection from './useProducerConnection';
+import useProducerConnection from '../useProducerConnection';
 
-// Define a fixed container class for each ProducerMonitor box.
-// Adjust these values later if you add a toggle for "charts per row".
 const containerClass =
   'flex flex-col min-w-[250px] h-[310px] max-w-[calc(20%-1rem)] basis-[20%] justify-center items-center mb-4';
 
