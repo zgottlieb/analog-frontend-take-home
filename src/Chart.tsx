@@ -78,6 +78,24 @@ const Chart = ({
       .attr('y2', innerHeight)
       .attr('stroke', 'white');
 
+    // x-axis label
+    g.append('text')
+      .attr('x', innerWidth)
+      .attr('y', verticalCenter - 5)
+      .attr('font-size', '0.8em')
+      .attr('text-anchor', 'end')
+      .attr('fill', 'white')
+      .text('time');
+
+    // y-axis label
+    g.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 10)
+      .attr('font-size', '0.8em')
+      .attr('text-anchor', 'end')
+      .attr('fill', 'white')
+      .text('value');
+
     const lineGenerator = d3
       .line<Message>()
       .x((d) => xScale(parseDate(d.timestamp) as Date))
