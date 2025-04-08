@@ -17,8 +17,8 @@ function ProducerMonitor({ id, isPaused, ...props }: Props) {
   return (
     <div {...props}>
       <p>Producer {id}</p>
-      {values.length > 0 && isPaused && (
-        <div className="text-xs font-mono text-center mt-1">
+      {values.length > 0 && (
+        <div className="text-xs font-mono mt-1">
           Min: {min.toFixed(2)} | Max: {max.toFixed(2)} | Avg: {avg.toFixed(2)}
         </div>
       )}

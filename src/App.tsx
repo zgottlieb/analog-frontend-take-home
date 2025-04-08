@@ -55,7 +55,7 @@ function App() {
           <ProducerMonitor
             id={i.toString()}
             key={i}
-            className="flex-1 min-w-[250px] max-w-[calc(20%-1rem)] basis-[20%] justify-center"
+            className="flex-1 min-w-[250px] max-w-[calc(20%-1rem)] basis-[20%] justify-center mb-4"
             isPaused={isPaused}
           />
         ))}
