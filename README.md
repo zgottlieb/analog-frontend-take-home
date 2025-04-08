@@ -1,55 +1,65 @@
 # Front-End Engineer Take-Home Challenge
 
-Design and implement a data visualization application that consumes and displays data in real time from multiple producers. The application should accurately plot the data from all producers with correlated timestamps.
+A real-time monitoring dashboard built with React, D3, and TailwindCSS. Streams data from 10 producers via WebSockets and visualizes live signal data with shared axis scaling and pause/resume control.
 
-## Requirements
+See the writeup of the challenge prompt here: ./challenge-prompt.md
 
-**Backend Server**
+## Getting started
 
-Integrate your Front-End with the provided rust-based server: Data Producer Backend.
+This app was built to use this repo as it's backend: https://github.com/6xzo/challenge-backend
 
-Alternatively, optionally, implement the backend server yourself with the following specifications: **Data Producers**
+To run the app, install dependencies and run the dev script
 
-Create 10 data producers, each generating random walk timeseries data. For each data point, include a timestamp and ensure that the timestamps are monotonically increasing.
+```
+yarn
+yarn dev
+```
 
-Each producer should emit 1000 data points per second. Consider emitting the data in a rate digestible by Front End.
+## How It Works
 
-Assign a unique identifier to each producer.
+The app connects to 10 unique WebSocket data producers.
 
-**Frontend**
+Each chart shows:
 
-Design an intuitive, organized, and visually-appealing UI to display the real-time data from all 10 producers. Plot the data from each producer, correlated by timestamp.
+- A real-time line plot of values over the last 1 second
+- The min, max, and average value for the visible window
+- Shared Y-axis scaling to enable meaningful comparison
 
-Update the charts in real-time as new data arrives from the producers.
+You can pause the data stream to freeze all charts and view values. A timestamp is displayed to indicate when the pause occurred.
 
-Optionally, provide extra features to users to only look at data within a specified timeframe and view data insights for each set of data within that timeframe (e.g., min, max, average).
+## Future directions
 
-Organize the described features into an intuitive and simple layout that does not overwhelm the users.
+This is only the barebones of what could become a useful monitoring application. There are several features I attempted and/or brainstormed to build here, including:
 
-## Technical Requirements
+**Brush tool or other way to select a timeframe**
+-I explored a D3-based brush tool for selecting a time window to summarize (min, max, avg) across all charts. This would support more fine-grained inspection beyond the current live window and for selecting unique time ranges to get min/max/avg aside from the default fixed window.
 
-**Frontend**
+- Due to time considerations, I deferred on implementing this fully, but would have liked to include: D3 code for the brush tool, event handling and state management for when the selection is active, and some form of persistence of data.
 
-React or another modern JavaScript framework (e.g., Angular , Vue.js ).
+**Thresholds & Alerts**
 
-Well-structured, readable and maintainable code.
+- Enable setting a threshold that sets a line on each chart to denote threshold value
+- Update Producer Monitor / Chart background color if threshold crossed
+- Long-term: notification system
 
-**Backend**
+**Global WebSocket / data management system (e.g. in Context)**
 
-Integrate with the provided backend server OR use any preferred backend language to implement your own.
+- One of my least favorite parts of the app is the way the yDomain is globally set from the Chart.tsx component.
+- An improvement would be to manage WebSocket connections and the data they produce in a React Context that can then update y domain and other globally relevant data as values stream in.
+- This approach also would mean pausing streams could happen more cleanly, with control methods made available through the Context. It also would make it easier to track the x-domain in a similar fashion, which would be useful if we wanted to break away from the hardcoded 1 second window.
 
-## Evaluation Criteria
+- Tooltips
 
-- Accuracy of plotting the data from all 10 producers with correlated timestamps. UI/UX and overall user experience.
-- Any optional features or enhancements.
-- Code quality and maintainability.
-- Technical documentation and testing.
+  - I didn't spend too much time with tooltips since this is more of a real-time monitoring tool.
+  - I think tooltips likely only make sense in Paused mode, if at all. One potentially interesting idea would be to enable the user to hover over a chart in Paused mode, and then see that timestamp (or the closest timestamp) to highlight in other charts with the data summary text updating to show that timestamp and value.
 
-## Submission Guidelines
+- UI controls
 
-- Create a new Git repository
-- Implement required features and test thoroughly.
-- Provide technical documentation.
-- Make repositories publicly accessible.
-- Prepare to discuss design decisions and implementation.
-- If using any code generator tools, mention it in the documentation. Feel free to use existing libraries and frameworks to simplify your implementation.
+  - Select buffer size (e.g. how much data to hold)
+  - Select display size (e.g. how much data to show)
+  - Grid controls (e.g. change number of charts per row for different sizes)
+  - Toggle between synced vs independent scales across charts
+
+- Testing
+  - Implement basic integration tests with Jest and React Testing Library.
+  - Use MockServiceWorker to mock WebSocket connections, since that's a core piece of the app.
