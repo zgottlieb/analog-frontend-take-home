@@ -20,7 +20,6 @@ const Chart = ({
 
   const { yDomain, updateYDomain } = useChartContext();
 
-  // TODO: Consider alternatives for setting global yDomain
   useEffect(() => {
     data.forEach((d) => updateYDomain(d.value));
   }, [data, updateYDomain]);

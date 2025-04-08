@@ -1,4 +1,4 @@
-**Front-End Engineer Take-Home Challenge**
+# Front-End Engineer Take-Home Challenge
 
 Design and implement a data visualization application that consumes and displays data in real time from multiple producers. The application should accurately plot the data from all producers with correlated timestamps.
 

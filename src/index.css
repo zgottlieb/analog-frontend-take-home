@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @plugin 'daisyui';
 
-/* TODO: Address the warning on @theme */
 @theme {
   --color-charcoal: #242424;
   --font-display: 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif';
