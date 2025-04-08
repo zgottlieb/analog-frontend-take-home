@@ -8,7 +8,10 @@ const MAX_BUFFER_SIZE = 1000;
 // Update interval in milliseconds (~30 FPS)
 const UPDATE_INTERVAL = 33;
 
-function useProducerConnection(connectionId: string): {
+function useProducerConnection(
+  connectionId: string,
+  isPaused: boolean
+): {
   messages: Message[];
   closeConnection: () => void;
   startConnection: () => void;
@@ -18,7 +21,6 @@ function useProducerConnection(connectionId: string): {
   const buffer = useRef<Message[]>([]);
 
   const startConnection = useCallback(() => {
-    // Only create a new connection if there's no active socket
     if (socketRef.current && socketRef.current.readyState !== WebSocket.CLOSED)
       return;
 
@@ -26,15 +28,16 @@ function useProducerConnection(connectionId: string): {
       `http://localhost:8000/producer/${connectionId}`
     );
     socketRef.current.onmessage = (event) => {
-      const data: Message[] = JSON.parse(event.data);
-      buffer.current.push(...data);
+      if (!isPaused) {
+        const data: Message[] = JSON.parse(event.data);
+        buffer.current.push(...data);
 
-      // Trim the buffer if it grows too large
-      if (buffer.current.length > MAX_BUFFER_SIZE) {
-        buffer.current = buffer.current.slice(-MAX_BUFFER_SIZE);
+        if (buffer.current.length > MAX_BUFFER_SIZE) {
+          buffer.current = buffer.current.slice(-MAX_BUFFER_SIZE);
+        }
       }
     };
-  }, [connectionId]);
+  }, [connectionId, isPaused]);
 
   const closeConnection = () => {
     socketRef.current?.close();
@@ -49,14 +52,14 @@ function useProducerConnection(connectionId: string): {
     };
   }, [startConnection]);
 
-  // TODO: Double check this approach; Can we pass new array
-  // only if buffer has changed to avoid unnecessary re-renders?
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setMessages([...buffer.current]);
+      if (!isPaused) {
+        setMessages([...buffer.current]);
+      }
     }, UPDATE_INTERVAL);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [isPaused]);
 
   return { messages, closeConnection, startConnection };
 }
