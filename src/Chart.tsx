@@ -50,18 +50,25 @@ const Chart = ({
       (d) => d.value
     );
 
+    // Get largest delta to use for symmetric domain around zero
+    const absMax = Math.max(
+      Math.abs(yExtent[0] ?? 0),
+      Math.abs(yExtent[1] ?? 0)
+    );
+
     const yScale = d3
       .scaleLinear()
-      .domain(yExtent as [number, number])
+      .domain([-absMax, absMax])
       .nice()
       .range([innerHeight, 0]);
 
-    // Draw x and y axes lines (no ticks or labels for now).
+    const verticalCenter = innerHeight / 2;
+
     g.append('line')
       .attr('x1', 0)
-      .attr('y1', innerHeight)
+      .attr('y1', verticalCenter)
       .attr('x2', innerWidth)
-      .attr('y2', innerHeight)
+      .attr('y2', verticalCenter)
       .attr('stroke', 'white');
 
     g.append('line')
