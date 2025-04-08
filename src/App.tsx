@@ -1,12 +1,11 @@
 import analogGarageLogo from './assets/garage-logo.png';
 import ProducerMonitor from './ProducerMonitor';
-import { useRef, useState } from 'react';
-import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
 import { ChartProvider } from './ChartContext';
+import ControlPanel from './ControlPanel';
 
 function App() {
   const [isPaused, setIsPaused] = useState(false);
-  const sessionStartTime = useRef<Date | null>(new Date());
 
   return (
     <ChartProvider>
@@ -27,31 +26,10 @@ function App() {
           </div>
           <h1 className="font-mono text-5xl">Data Producer Dashboard</h1>
         </div>
-        <div className="flex items-center gap-4 px-[2rem] mb-4 py-2">
-          <div className="font-mono text-sm flex items-center gap-4">
-            <span>
-              Session start time:{' '}
-              {sessionStartTime.current?.toLocaleTimeString() || '--:--:--'}
-            </span>
-            <button
-              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-slate-700 hover:bg-slate-600 text-white transition-colors cursor-pointer"
-              onClick={() => setIsPaused((prev) => !prev)}
-            >
-              {isPaused ? (
-                <>
-                  <PlayIcon className="h-5 w-5" />
-                  <span>Resume</span>
-                </>
-              ) : (
-                <>
-                  <PauseIcon className="h-5 w-5" />
-                  <span>Pause</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
+        <ControlPanel
+          isPaused={isPaused}
+          handleTogglePause={() => setIsPaused((prev) => !prev)}
+        />
         <div className="flex flex-wrap justify-start gap-1 px-[2rem]">
           {Array.from({ length: 10 }).map((_, i) => (
             <ProducerMonitor id={i.toString()} key={i} isPaused={isPaused} />

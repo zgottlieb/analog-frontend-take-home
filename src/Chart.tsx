@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import { Message } from './types';
+import { Message, TIME_WINDOW } from './types';
 import { useChartContext } from './ChartContext';
 
 type ChartProps = {
@@ -44,15 +44,10 @@ const Chart = ({
     const parseDate = d3.isoParse;
     const filteredData = data.filter((d) => parseDate(d.timestamp) !== null);
 
-    const xExtent = d3.extent(
-      filteredData,
-      (d) => parseDate(d.timestamp) as Date
-    );
-
-    const xScale = d3
-      .scaleTime()
-      .domain(xExtent as [Date, Date])
-      .range([0, innerWidth]);
+    const xMax =
+      d3.max(filteredData, (d) => parseDate(d.timestamp)) ?? new Date();
+    const xMin = new Date(xMax.getTime() - TIME_WINDOW);
+    const xScale = d3.scaleTime().domain([xMin, xMax]).range([0, innerWidth]);
 
     const yScale = d3
       .scaleLinear()
