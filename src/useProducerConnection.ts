@@ -4,9 +4,6 @@ import { Message } from './types';
 // Maximum number of messages to keep in the buffer
 const MAX_BUFFER_SIZE = 1000;
 
-// Update interval in milliseconds (~30 FPS)
-const UPDATE_INTERVAL = 33;
-
 function useProducerConnection(
   connectionId: string,
   isPaused: boolean
@@ -34,6 +31,9 @@ function useProducerConnection(
         if (buffer.current.length > MAX_BUFFER_SIZE) {
           buffer.current = buffer.current.slice(-MAX_BUFFER_SIZE);
         }
+
+        // Consider updating messages on some other interval if performance degrades
+        setMessages([...buffer.current]);
       }
     };
   }, [connectionId, isPaused]);
@@ -50,15 +50,6 @@ function useProducerConnection(
       closeConnection();
     };
   }, [startConnection]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (!isPaused) {
-        setMessages([...buffer.current]);
-      }
-    }, UPDATE_INTERVAL);
-    return () => clearInterval(intervalId);
-  }, [isPaused]);
 
   return { messages, closeConnection, startConnection };
 }
